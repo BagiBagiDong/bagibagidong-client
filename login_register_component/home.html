@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="vm">
+        <label>File
+            <input type="file" id="file" ref="file" v-on:change="handleFileUpload($event)">
+        </label>
+        <a class="twitter-share-button" :href='link' data-size="large">
+            Tweet</a>
+        <button v-on:click="submitFile" type="submit">Submit</button>
+        <button v-on:click="shareFB" type="submit">Share FB</button>
+        <button class="btn my-2 my-sm-0" type="submit" onclick="logout()">Logout</button>
+    </div>
+    <script>
+
+        var vm = new Vue({
+            el: "#vm",
+            data: {
+                file: '',
+                link: `https://twitter.com/intent/tweet?text=This%20is%20your%20BagiBagiDong%20link%20${window.location.href}`
+            },
+            methods: {
+                handleFileUpload: function (e) {
+                    this.file = e.target.files[0]
+                },
+                submitFile: function () {
+                    let formData = new FormData()
+                    formData.append('image', this.file)
+                    console.log(formData, "==========")
+                    axios
+                        .post('http://localhost:3000/upload', formData)
+                        .then(function (response) {
+                            console.log(response.data.link)
+                        })
+                        .catch(function (err) {
+                            console.log("woiii")
+                            console.log(err)
+                        })
+                },
+                shareFB: function () {
+                    FB.ui({
+                        method: 'share',
+                        display: 'popup',
+                        href: 'https://developers.facebook.com/docs/',
+                        quote: `Hello this is your link from BagiBagiDong ${window.location.href}`
+                    }, function (response) {
+                        console.log(response)
+                    });
+                }
+            }
+        })
+    </script>
+    <script src="loginfb.js"></script>
+</body>
+
+</html>
