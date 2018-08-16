@@ -1,2 +1,1 @@
-# bagibagidong-client
-client for BagiBagiDong
+# e-commerce
